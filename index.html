@@ -1,0 +1,768 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#0c0b16">
+    <meta name="description" content="Create personalized AI-powered quizzes on any topic with Quizify AI.">
+
+    <title>Quizify AI - Smart Quiz Generator</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- BACKGROUND EFFECTS -->
+    <div class="background-effects">
+        <div class="glow glow-one"></div>
+        <div class="glow glow-two"></div>
+    </div>
+
+
+    <!-- NAVIGATION BAR -->
+    <header class="navbar">
+
+        <a href="#" class="logo" id="homeBtn">
+            <span class="logo-icon">Q</span>
+            <span>Quizify<span class="logo-ai">AI</span></span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="#generator">Create Quiz</a>
+            <a href="#features">Features</a>
+        </nav>
+
+        <button class="nav-history-btn" id="historyBtn">
+            <span>◷</span> History
+        </button>
+
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-container">
+
+
+        <!-- HERO SECTION -->
+        <section class="hero-section">
+
+            <div class="hero-badge">
+                <span class="status-dot"></span>
+                POWERED BY ARTIFICIAL INTELLIGENCE
+            </div>
+
+            <h1>
+                Test your knowledge.<br>
+                <span class="gradient-text">Challenge your mind.</span>
+            </h1>
+
+            <p class="hero-description">
+                Turn any topic into an interactive quiz.
+                Generate questions, test yourself and discover
+                how much you really know.
+            </p>
+
+            <div class="hero-actions">
+
+                <button class="primary-btn" id="startCreatingBtn">
+                    Create Your Quiz
+                    <span>→</span>
+                </button>
+
+                <a href="#features" class="secondary-btn">
+                    Explore Features
+                </a>
+
+            </div>
+
+            <div class="hero-stats">
+
+                <div class="stat">
+                    <strong>AI</strong>
+                    <span>Powered Questions</span>
+                </div>
+
+                <div class="stat-divider"></div>
+
+                <div class="stat">
+                    <strong>20</strong>
+                    <span>Questions Per Quiz</span>
+                </div>
+
+                <div class="stat-divider"></div>
+
+                <div class="stat">
+                    <strong>∞</strong>
+                    <span>Topics To Explore</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUIZ GENERATOR SECTION -->
+        <section class="generator-section" id="generator">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-tag">QUIZ GENERATOR</span>
+                    <h2>Create your own quiz</h2>
+                    <p>Choose your topic and customize your experience.</p>
+                </div>
+
+                <div class="ai-indicator">
+                    <span class="status-dot"></span>
+                    AI Ready
+                </div>
+
+            </div>
+
+
+            <div class="generator-card">
+
+                <form id="quizForm">
+
+                    <!-- TOPIC INPUT -->
+                    <div class="form-group">
+
+                        <label for="topic">
+                            What do you want to be tested on?
+                        </label>
+
+                        <p class="input-description">
+                            Enter any subject, topic or specific concept.
+                        </p>
+
+                        <div class="topic-input-wrapper">
+
+                            <span class="input-icon">✦</span>
+
+                            <input
+                                type="text"
+                                id="topic"
+                                name="topic"
+                                placeholder="Try Minecraft, Physics, World History..."
+                                maxlength="150"
+                                required
+                            >
+
+                        </div>
+
+                        <div class="suggested-topics">
+
+                            <span>Try:</span>
+
+                            <button type="button" class="topic-chip"
+                                data-topic="Minecraft">
+                                Minecraft
+                            </button>
+
+                            <button type="button" class="topic-chip"
+                                data-topic="Science">
+                                Science
+                            </button>
+
+                            <button type="button" class="topic-chip"
+                                data-topic="World History">
+                                History
+                            </button>
+
+                            <button type="button" class="topic-chip"
+                                data-topic="Computer Science">
+                                Technology
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DIFFICULTY AND QUESTION COUNT -->
+                    <div class="settings-grid">
+
+                        <div class="form-group">
+
+                            <label for="difficulty">
+                                Difficulty Level
+                            </label>
+
+                            <p class="input-description">
+                                Choose your challenge.
+                            </p>
+
+                            <div class="select-wrapper">
+
+                                <select id="difficulty" name="difficulty">
+
+                                    <option value="Easy">
+                                        Easy - Beginner
+                                    </option>
+
+                                    <option value="Medium" selected>
+                                        Medium - Intermediate
+                                    </option>
+
+                                    <option value="Hard">
+                                        Hard - Advanced
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="questionCount">
+                                Number of Questions
+                            </label>
+
+                            <p class="input-description">
+                                How long should your quiz be?
+                            </p>
+
+                            <div class="select-wrapper">
+
+                                <select id="questionCount" name="questionCount">
+
+                                    <option value="5">5 Questions</option>
+                                    <option value="10" selected>10 Questions</option>
+                                    <option value="15">15 Questions</option>
+                                    <option value="20">20 Questions</option>
+
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- QUESTION TYPE -->
+                    <div class="form-group">
+
+                        <label for="questionType">
+                            Question Type
+                        </label>
+
+                        <p class="input-description">
+                            Select how you want to answer.
+                        </p>
+
+                        <div class="select-wrapper">
+
+                            <select id="questionType" name="questionType">
+
+                                <option value="multiple-choice">
+                                    Multiple Choice
+                                </option>
+
+                                <option value="true-false">
+                                    True or False
+                                </option>
+
+                                <option value="mixed">
+                                    Mixed Questions
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- EXTRA INSTRUCTIONS -->
+                    <div class="form-group">
+
+                        <label for="extraInstructions">
+                            Additional Instructions
+                            <span class="optional-label">OPTIONAL</span>
+                        </label>
+
+                        <p class="input-description">
+                            Tell AI exactly what you want to practice.
+                        </p>
+
+                        <textarea
+                            id="extraInstructions"
+                            name="extraInstructions"
+                            rows="3"
+                            maxlength="500"
+                            placeholder="Example: Focus on Minecraft survival mechanics and redstone..."
+                        ></textarea>
+
+                    </div>
+
+
+                    <!-- GENERATE BUTTON -->
+                    <button type="submit" class="generate-btn" id="generateBtn">
+
+                        <span class="generate-icon">✦</span>
+
+                        <span id="generateBtnText">
+                            Generate My Quiz
+                        </span>
+
+                        <span class="generate-arrow">→</span>
+
+                    </button>
+
+                    <p class="generator-note">
+                        ✦ Your quiz will be generated by AI.
+                    </p>
+
+                </form>
+
+            </div>
+
+        </section>
+
+
+        <!-- LOADING SECTION -->
+        <section class="loading-section hidden" id="loadingSection">
+
+            <div class="loading-animation">
+                <div class="loading-circle"></div>
+                <span>✦</span>
+            </div>
+
+            <h2>Creating your quiz...</h2>
+
+            <p id="loadingMessage">
+                AI is preparing your questions.
+            </p>
+
+            <div class="loading-progress">
+                <div class="loading-progress-bar"></div>
+            </div>
+
+            <p class="loading-tip">
+                Please wait while we prepare your challenge.
+            </p>
+
+        </section>
+
+
+        <!-- ERROR MESSAGE -->
+        <div class="error-message hidden" id="errorMessage" role="alert">
+
+            <span class="error-icon">!</span>
+
+            <div>
+                <strong>Something went wrong</strong>
+                <p id="errorText">
+                    Unable to generate your quiz. Please try again.
+                </p>
+            </div>
+
+            <button type="button" id="closeErrorBtn" aria-label="Close error">
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- QUIZ PLAYING SECTION -->
+        <section class="quiz-section hidden" id="quizSection">
+
+            <!-- QUIZ TOP BAR -->
+            <div class="quiz-topbar">
+
+                <button type="button" id="exitQuizBtn" class="exit-btn">
+                    ← Exit Quiz
+                </button>
+
+                <div class="quiz-topic-display" id="quizTopicDisplay">
+                    General Knowledge
+                </div>
+
+                <div class="quiz-difficulty-display" id="quizDifficultyDisplay">
+                    Medium
+                </div>
+
+            </div>
+
+
+            <!-- QUIZ PROGRESS -->
+            <div class="quiz-progress-card">
+
+                <div class="quiz-progress-info">
+
+                    <span id="questionProgress">
+                        Question 1 of 10
+                    </span>
+
+                    <span id="quizPercentage">
+                        0% completed
+                    </span>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-fill"
+                        id="progressFill"
+                        style="width: 0%">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- QUESTION CARD -->
+            <div class="question-card">
+
+                <div class="question-label">
+                    <span class="question-number" id="questionNumber">
+                        QUESTION 01
+                    </span>
+
+                    <span class="question-type-badge" id="questionTypeBadge">
+                        MULTIPLE CHOICE
+                    </span>
+                </div>
+
+
+                <h2 id="questionText">
+                    Your question will appear here.
+                </h2>
+
+
+                <!-- ANSWER OPTIONS -->
+                <div class="answer-options" id="optionsContainer">
+
+                    <!-- JavaScript will insert answer options here -->
+
+                </div>
+
+
+                <!-- HINT -->
+                <div class="hint-area">
+
+                    <button type="button" id="hintBtn" class="hint-btn">
+                        💡 Show Hint
+                    </button>
+
+                    <p id="hintText" class="hint-text hidden"></p>
+
+                </div>
+
+
+                <!-- QUESTION FEEDBACK -->
+                <div
+                    class="answer-feedback hidden"
+                    id="answerFeedback"
+                    aria-live="polite">
+                </div>
+
+
+                <!-- QUESTION NAVIGATION -->
+                <div class="question-navigation">
+
+                    <button
+                        type="button"
+                        class="next-question-btn"
+                        id="nextQuestionBtn"
+                        disabled>
+
+                        Next Question →
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <p class="quiz-footer-note">
+                Take your time. Think carefully before selecting an answer.
+            </p>
+
+        </section>
+
+
+        <!-- RESULTS SECTION -->
+        <section class="results-section hidden" id="resultsSection">
+
+            <div class="results-card">
+
+                <div class="results-icon" id="resultsIcon">
+                    🏆
+                </div>
+
+                <span class="section-tag">QUIZ COMPLETED</span>
+
+                <h1 id="resultHeading">
+                    Great Job!
+                </h1>
+
+                <p id="resultDescription">
+                    You have completed your quiz.
+                </p>
+
+
+                <!-- SCORE -->
+                <div class="score-circle" id="scoreCircle">
+
+                    <div class="score-content">
+
+                        <strong id="finalScore">0/10</strong>
+
+                        <span>Your Score</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESULT STATS -->
+                <div class="result-stats">
+
+                    <div class="result-stat">
+
+                        <span class="result-stat-icon">✓</span>
+
+                        <strong id="correctCount">0</strong>
+
+                        <span>Correct</span>
+
+                    </div>
+
+                    <div class="result-stat">
+
+                        <span class="result-stat-icon">✕</span>
+
+                        <strong id="incorrectCount">0</strong>
+
+                        <span>Incorrect</span>
+
+                    </div>
+
+                    <div class="result-stat">
+
+                        <span class="result-stat-icon">%</span>
+
+                        <strong id="accuracy">0%</strong>
+
+                        <span>Accuracy</span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- RESULT ACTIONS -->
+                <div class="result-actions">
+
+                    <button type="button" id="reviewAnswersBtn" class="secondary-btn">
+                        Review Answers
+                    </button>
+
+                    <button type="button" id="retryBtn" class="primary-btn">
+                        Create Another Quiz →
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- ANSWER REVIEW -->
+            <div class="review-section hidden" id="reviewSection">
+
+                <div class="section-heading">
+
+                    <div>
+                        <span class="section-tag">YOUR PERFORMANCE</span>
+                        <h2>Answer Review</h2>
+                        <p>See what you got right and learn from your mistakes.</p>
+                    </div>
+
+                </div>
+
+                <div id="answerReviewList">
+
+                    <!-- JavaScript will insert answer reviews here -->
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- HISTORY SECTION -->
+        <section class="history-section hidden" id="historySection">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-tag">YOUR ACTIVITY</span>
+                    <h2>Quiz History</h2>
+                    <p>Keep track of your previous quiz attempts.</p>
+                </div>
+
+                <button type="button" id="clearHistoryBtn" class="clear-history-btn">
+                    Clear History
+                </button>
+
+            </div>
+
+
+            <div id="historyList" class="history-list">
+
+                <!-- JavaScript will insert saved quiz history here -->
+
+            </div>
+
+
+            <div id="emptyHistory" class="empty-history">
+
+                <div class="empty-history-icon">◷</div>
+
+                <h3>No quizzes yet</h3>
+
+                <p>
+                    Your completed quizzes will appear here.
+                    Start your first challenge!
+                </p>
+
+                <button type="button" id="createFirstQuizBtn" class="primary-btn">
+                    Create Your First Quiz
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- FEATURES SECTION -->
+        <section class="features-section" id="features">
+
+            <div class="section-heading centered">
+
+                <span class="section-tag">WHY QUIZIFY AI?</span>
+
+                <h2>Smarter learning starts here.</h2>
+
+                <p>Everything you need to test and improve your knowledge.</p>
+
+            </div>
+
+
+            <div class="features-grid">
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">✦</div>
+
+                    <h3>AI Generated</h3>
+
+                    <p>
+                        Get unique questions generated based on your
+                        selected topic and difficulty.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">⚡</div>
+
+                    <h3>Instant Results</h3>
+
+                    <p>
+                        See your score, accuracy and performance
+                        immediately after completing a quiz.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">◈</div>
+
+                    <h3>Learn Anything</h3>
+
+                    <p>
+                        Explore unlimited topics and challenge
+                        yourself with different subjects.
+                    </p>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <div class="feature-icon">▤</div>
+
+                    <h3>Track Progress</h3>
+
+                    <p>
+                        Review previous quizzes and learn from
+                        your incorrect answers.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+
+        <!-- FINAL CALL TO ACTION -->
+        <section class="bottom-cta">
+
+            <h2>Ready for your next challenge?</h2>
+
+            <p>
+                Pick a topic, generate a quiz and test your knowledge.
+            </p>
+
+            <button type="button" class="primary-btn" id="bottomCreateBtn">
+                Start Learning →
+            </button>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <a href="#" class="logo">
+            <span class="logo-icon">Q</span>
+            <span>Quizify<span class="logo-ai">AI</span></span>
+        </a>
+
+        <p>
+            Learn something new. One quiz at a time.
+        </p>
+
+        <div class="footer-bottom">
+            © 2026 Quizify AI. All rights reserved.
+        </div>
+
+    </footer>
+
+
+    <!-- JAVASCRIPT -->
+    <script src="script.js"></script>
+
+</body>
+</html>
