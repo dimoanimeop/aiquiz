@@ -1,24 +1,18 @@
 
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
-require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json({ limit: "20kb" }));
+app.use(express.json({ limit: "1mb" }));
 app.use(express.static(__dirname));
 
+// Generate Quiz API
 app.post("/api/generate-quiz", async (req, res) => {
   try {
-    const {
-      topic,
-      difficulty,
-      questionCount,
-      questionType,
-      extraInstructions
-    } = req.body;
-
     const apiKey = process.env.GROQ_API_KEY;
 
     if (!apiKey) {
@@ -27,85 +21,59 @@ app.post("/api/generate-quiz", async (req, res) => {
       });
     }
 
-    // Validate inputs
-    if (
-      typeof topic !== "string" ||
-      !topic.trim() ||
-      topic.length > 150
-    ) {
+    const {
+      topic,
+      difficulty,
+      questionCount,
+      questionType,
+      extraInstructions
+    } = req.body;
+
+    if (!topic || !String(topic).trim()) {
       return res.status(400).json({
-        error: "Enter a valid topic (maximum 150 characters)."
+        error: "Please enter a quiz topic."
       });
     }
 
-    if (!["Easy", "Medium", "Hard"].includes(difficulty)) {
-      return res.status(400).json({
-        error: "Invalid difficulty."
-      });
-    }
-
-    const count = Number(questionCount);
-
-    if (![5, 10, 15, 20].includes(count)) {
-      return res.status(400).json({
-        error: "Invalid question count."
-      });
-    }
-
-    if (
-      !["multiple-choice", "true-false", "mixed"].includes(questionType)
-    ) {
-      return res.status(400).json({
-        error: "Invalid question type."
-      });
-    }
-
-    const instructions =
-      typeof extraInstructions === "string"
-        ? extraInstructions.slice(0, 500)
-        : "";
+    const count = Math.min(
+      Math.max(parseInt(questionCount, 10) || 5, 1),
+      20
+    );
 
     const prompt = `
-You are an expert quiz generator.
+Create a quiz using these settings:
 
-Create a quiz with these settings:
-
-Topic: ${topic.trim()}
-Difficulty: ${difficulty}
+Topic: ${topic}
+Difficulty: ${difficulty || "Medium"}
 Number of questions: ${count}
-Question type: ${questionType}
-Extra instructions: ${instructions || "None"}
+Question type: ${questionType || "Multiple Choice"}
+Extra instructions: ${extraInstructions || "None"}
 
-RULES:
-- Generate exactly ${count} questions.
-- Questions must be accurate and relevant.
-- Avoid duplicate questions.
-- Every question must have a clear correct answer.
-- Multiple-choice questions must have exactly 4 options.
-- True-false questions must have exactly 2 options: True and False.
-- For mixed quizzes, include both types.
-- correctAnswer must be a zero-based integer.
-- Include a short hint and explanation for every question.
-- Use "multiple-choice" or "true-false" as the type.
-- Return only valid JSON.
-
-Required JSON format:
+Return ONLY valid JSON in this exact structure:
 
 {
   "questions": [
     {
       "question": "Question text",
-      "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-      "correctAnswer": 0,
-      "hint": "Helpful hint",
-      "explanation": "Explanation of the answer",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
+      "correctAnswer": "Correct option",
+      "hint": "A helpful hint",
+      "explanation": "Explanation of the correct answer",
       "type": "multiple-choice"
     }
   ]
 }
+
+Rules:
+- Generate exactly ${count} questions.
+- Make sure every question is accurate.
+- For multiple-choice questions, provide exactly four options.
+- correctAnswer must exactly match one of the options.
+- For true/false questions, use True and False as options.
+- Include a useful hint and explanation for every question.
+- Do not include markdown or text outside the JSON.
 `;
 
-    // Call Groq API
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -129,8 +97,7 @@ Required JSON format:
           response_format: {
             type: "json_object"
           },
-          temperature: 0.5,
-          max_completion_tokens: 8192
+          temperature: 0.7
         })
       }
     );
@@ -140,91 +107,30 @@ Required JSON format:
     if (!response.ok) {
       console.error("Groq API error:", data);
 
-      return res.status(502).json({
-        error:
-          data.error?.message ||
-          "Groq could not generate your quiz. Try again."
+      return res.status(response.status).json({
+        error: data.error?.message || "AI quiz generation failed."
       });
     }
 
-    const generatedText = data.choices?.[0]?.message?.content;
+    const content = data.choices?.[0]?.message?.content;
 
-    if (!generatedText) {
-      return res.status(502).json({
-        error: "Groq returned an empty response. Try again."
-      });
+    if (!content) {
+      throw new Error("The AI returned an empty response.");
     }
 
-    // Parse AI response
-    let quizData;
+    const quiz = JSON.parse(content);
 
-    try {
-      quizData = JSON.parse(generatedText);
-    } catch (error) {
-      console.error("Invalid JSON from Groq:", generatedText);
-
-      return res.status(502).json({
-        error: "The AI returned an invalid quiz. Please try again."
-      });
+    if (!Array.isArray(quiz.questions)) {
+      throw new Error("Invalid quiz format returned by AI.");
     }
 
-    // Check question count
-    if (
-      !Array.isArray(quizData.questions) ||
-      quizData.questions.length !== count
-    ) {
-      return res.status(502).json({
-        error: "AI generated an incomplete quiz. Please try again."
-      });
-    }
-
-    // Validate each question
-    for (const question of quizData.questions) {
-      if (
-        !question ||
-        typeof question.question !== "string" ||
-        !question.question.trim() ||
-        !Array.isArray(question.options) ||
-        question.options.length < 2 ||
-        !question.options.every(
-          option => typeof option === "string" && option.trim()
-        ) ||
-        !Number.isInteger(question.correctAnswer) ||
-        question.correctAnswer < 0 ||
-        question.correctAnswer >= question.options.length
-      ) {
-        return res.status(502).json({
-          error: "AI generated an invalid question. Please try again."
-        });
-      }
-
-      if (
-        question.type !== "multiple-choice" &&
-        question.type !== "true-false"
-      ) {
-        question.type = "multiple-choice";
-      }
-
-      question.hint =
-        typeof question.hint === "string" ? question.hint : "";
-
-      question.explanation =
-        typeof question.explanation === "string"
-          ? question.explanation
-          : "No explanation available.";
-    }
-
-    // Send quiz to frontend
-    res.json({
-      success: true,
-      questions: quizData.questions
-    });
+    res.json(quiz);
 
   } catch (error) {
-    console.error("Server error:", error);
+    console.error("Quiz generation error:", error);
 
     res.status(500).json({
-      error: "Something went wrong. Please try again."
+      error: error.message || "Something went wrong while generating the quiz."
     });
   }
 });
